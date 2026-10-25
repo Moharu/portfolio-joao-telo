@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.env*
+!.env.example
+test-results/
+playwright-report/
+artifacts/
+*.tsbuildinfo
+# Supplied planning inputs stay local; public résumé copy is tracked under public/.
+/coding-assistant-prompt.md
+/portfolio-spec.md
+/Joao_Telo_Resume.pdf
