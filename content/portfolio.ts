@@ -1,7 +1,8 @@
+import { assetPath } from "./site";
 export const profile = {
   name: "João Teló",
   email: "joaovtelo@gmail.com",
-  resume: "/resume/joao-telo-resume.pdf",
+  resume: assetPath("/resume/joao-telo-resume.pdf"),
   github: "https://github.com/Moharu",
   linkedin: "https://www.linkedin.com/in/joaotelo/",
   intro:
@@ -16,17 +17,17 @@ export interface Project {
   links: { label: string; href: string }[];
   disclosure?: string;
   image?: string;
+  compact?: boolean;
 }
 export const projects: Project[] = [
   {
-    image: "/projects/gameplay-review-demo.webp",
+    image: assetPath("/projects/gameplay-review-demo.webp"),
     title: "Gameplay Video Review Tool",
     label: "Personal project · MVP · October 2026",
     description:
       "A React and TypeScript app for reviewing gameplay recordings with timestamped feedback. Reviewers can jump to moments in a video, edit notes, and filter feedback by category and importance.",
     highlights: [
-      "Local persistence and recording reconnection.",
-      "A hosted demo isolated from the user's saved review.",
+      "Save reviews locally and reconnect recordings to continue reviewing later.",
       "Vitest and React Testing Library tests, with GitHub Actions checks.",
     ],
     tags: ["React", "TypeScript", "Vite", "Vitest", "React Testing Library"],
@@ -38,7 +39,7 @@ export const projects: Project[] = [
       },
     ],
     disclosure:
-      "Developed with substantial AI assistance. I defined workflows, contributed code and tests, supplied domain knowledge, and verified behavior in the browser and on a phone.",
+      "I defined the review workflow, contributed code and tests, and verified the experience on desktop and mobile. Built with substantial AI assistance.",
   },
   {
     title: "Playwright Test Automation Portfolio",
@@ -57,6 +58,23 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    compact: true,
+    title: "Support Ticket Dashboard — React & Redux Toolkit Exercise",
+    label: "Personal project · Practice exercise",
+    description:
+      "Built a dashboard with combined status, priority and title filters, optimistic updates, and per-ticket rollback when saves fail.",
+    highlights: [],
+    tags: ["React", "TypeScript", "Next.js", "Redux Toolkit", "Vitest"],
+    links: [
+      {
+        label: "View dashboard source and development notes",
+        href: "https://github.com/Moharu/support-ticket-dashboard-exercise",
+      },
+    ],
+    disclosure:
+      "Developed through AI-assisted coaching. I independently wrote the priority-filter test extensions, with assistant review and feedback. The repository README explains the assistance in detail.",
+  },
 ];
 export const experience = [
   {
@@ -64,7 +82,7 @@ export const experience = [
     role: "Full Stack JavaScript Developer",
     dates: "July 2019–August 2022",
     description:
-      "Primarily front-end development with React and TypeScript in international remote teams. Translated Figma designs into reusable components, integrated APIs, and handled complex forms, loading states, and errors. Wrote Jest tests and regression coverage, worked with shared components and Storybook, and reviewed pull requests.",
+      "Built React and Next.js interfaces for international client projects, including a fitness livestreaming platform with real-time audience reactions via WebSockets. Used Redux for application state, built shared components with TypeScript and Storybook, wrote Jest tests, and collaborated through code reviews in remote teams.",
   },
   {
     company: "DarkShine",
@@ -84,6 +102,8 @@ export const experience = [
 export const skills = {
   professional: [
     "React",
+    "Next.js",
+    "Redux",
     "TypeScript",
     "JavaScript",
     "HTML",

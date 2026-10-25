@@ -4,6 +4,7 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const results = [];
 for (const url of [
+  "https://github.com/Moharu/support-ticket-dashboard-exercise",
   "https://github.com/Moharu/ffxiv-pull-review",
   "https://github.com/Moharu/practice-playwright",
   "https://github.com/Moharu",

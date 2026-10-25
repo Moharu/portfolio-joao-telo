@@ -5,8 +5,8 @@ Local production URL: http://localhost:3000. Date uses America/Sao_Paulo (raw re
 ## Implementation and functional checks
 
 - `npm run lint`: passed without warnings; strict `npm run typecheck`: passed; `npm run build`: passed using webpack. Build output marks `/`, robots and sitemap as static prerendered routes.
-- Nine Playwright tests passed: three journeys in Chromium, Firefox and WebKit. Verified anchor destinations, exact project/social/mail links, successful PDF response and signature, skip link, keyboard-operated native disclosure, automated axe WCAG 2/2.1/2.2 A/AA scans, responsive overflow, enlarged text, and navigation/content with JavaScript disabled.
-- Core content exists in returned HTML. No custom Client Components or per-request content fetching.
+- Twelve Playwright tests passed: four journeys in Chromium, Firefox and WebKit. Verified anchor destinations, exact project/social/mail links, successful PDF response and signature, skip link, keyboard-operated native disclosure, automated axe WCAG 2/2.1/2.2 A/AA scans, responsive overflow, enlarged text, and navigation/content with JavaScript disabled.
+- Core content exists in returned HTML. The theme switch is the only custom Client Component; portfolio content remains server rendered without per-request content fetching.
 - Tested widths 320, 375, 390, 768, 1024, 1440, plus 667 × 375 landscape. No horizontal page overflow detected. Reviewed saved desktop, tablet, phone and landscape screenshots. Header wraps rather than hiding links. Project reading order on phones is title → media → description → links.
 - Tested 200% root text sizing at 320 CSS pixels in all three engines. The first test revealed fixed typography; converted font sizes to rem and verified the correction. Enlarged text wraps, including long words, without clipping. This stress check combines text enlargement and narrow reflow; it is not a physical-browser zoom-control test.
 - Reviewed keyboard focus order and saved focused skip-link evidence. Focus has a 3px blue outline and 5px offset; native anchors and details work without JavaScript. No focus trap. Main CTAs and navigation links have at least 44px height. Automated accessibility scans found no violations in tested states; this is not a WCAG certification.
@@ -19,15 +19,15 @@ Lighthouse 13.5.0 via its Node API, installed Playwright Chromium; Node 24.22.0.
 
 | Metric         |  Run 1 |  Run 2 |  Run 3 |            Target |
 | -------------- | -----: | -----: | -----: | ----------------: |
-| Performance    |    100 |    100 |     99 |        median ≥95 |
+| Performance    |     99 |    100 |     99 |        median ≥95 |
 | Accessibility  |    100 |    100 |    100 |               ≥95 |
 | Best Practices |    100 |    100 |    100 |               ≥95 |
 | SEO            |     66 |     66 |     66 | ≥95 before launch |
-| LCP            | 1.505s | 1.656s | 1.974s |             ≤2.5s |
+| LCP            | 1.966s | 1.654s | 1.969s |             ≤2.5s |
 | CLS            |      0 |      0 |      0 |              ≤0.1 |
-| TBT            | 19.5ms |   19ms | 16.5ms |            ≤200ms |
+| TBT            |   19ms | 19.5ms | 20.5ms |            ≤200ms |
 
-Median Performance: **100**. SEO target is **not met in the preview**: indexing is deliberately blocked by robots and page metadata. The failed SEO audit is `is-crawlable`. Keep preview protection; after the origin is confirmed, build production with indexing enabled and rerun the SEO audit. No production SEO score is claimed.
+Median Performance: **99**. SEO target is **not met in the preview**: indexing is deliberately blocked by robots and page metadata. The failed SEO audit is `is-crawlable`. Keep preview protection; after the origin is confirmed, build production with indexing enabled and rerun the SEO audit. No production SEO score is claimed.
 
 These are local lab scores, not real-user Core Web Vitals. There is no field LCP/INP/CLS dataset. TBT does not establish INP compliance. Local-server lab results do not include production CDN latency or physical-device performance.
 
@@ -37,12 +37,12 @@ Chromium, 390 × 844 CSS pixels, DPR 1, fresh page/context, CDP browser cache di
 
 | Resource                        |      Measured |            Budget |
 | ------------------------------- | ------------: | ----------------: |
-| JavaScript                      | 141,832 bytes |          ≤150,000 |
-| CSS                             |   4,448 bytes |           ≤30,000 |
+| JavaScript                      | 142,587 bytes |          ≤150,000 |
+| CSS                             |   4,915 bytes |           ≤30,000 |
 | Fonts                           |       0 bytes |          ≤100,000 |
-| Document                        |   7,538 bytes | included in total |
-| Images fetched before scrolling |  11,493 bytes | included in total |
-| Total                           | 165,311 bytes |          ≤700,000 |
+| Document                        |   7,800 bytes | included in total |
+| Images fetched before scrolling |  11,492 bytes | included in total |
+| Total                           | 166,794 bytes |          ≤700,000 |
 
 Raw resource URLs, response headers and encoded lengths: `artifacts/transfers.json`. The genuine WebP source is approximately 93KB. Sampled optimized 640px screenshot responses were 31,792 bytes (direct Playwright request); browser Accept negotiation can choose a smaller format. Both are below the 150KB aim. Full-page evidence screenshots are QA artifacts, not assets delivered by the site.
 
@@ -63,3 +63,29 @@ Raw resource URLs, response headers and encoded lengths: `artifacts/transfers.js
 4. No physical phone, assistive-technology/screen-reader session, native browser zoom UI, real-user measurements or deployed/CDN checks were performed. Automated WebKit is not a test on physical Safari/iOS. Browser engines and responsive emulation were tested locally.
 
 Evidence is retained under ignored `artifacts/`, `test-results/` and `playwright-report/`. Reproduce using README commands. Supplied planning inputs remain local and are excluded from the implementation commit.
+
+## Dark mode update
+
+User-requested dark mode supersedes the original light-only scope. Dark is the default with and without JavaScript, independent of system preference. An isolated header button switches themes with Enter/Space and remembers the explicit choice in localStorage. A pre-paint script restores saved light or dark mode; unavailable storage safely falls back to dark on reload. The nonfunctional switch is hidden when JavaScript is disabled.
+
+Production build, lint and strict typing passed. All 12 tests passed in Chromium, Firefox and WebKit, including keyboard switching, reload persistence, axe checks in both palettes, no-JavaScript content, narrow layouts and 200% text. Dark preview screenshots were refreshed and desktop appearance inspected. No physical-device checks were added.
+
+Refreshed mobile Lighthouse runs: Performance **99 / 100 / 99** (median **99**), Accessibility **100 / 100 / 100**, Best Practices **100 / 100 / 100**, SEO **66 / 66 / 66** (preview remains deliberately noindex). LCP **1.966 / 1.654 / 1.969 seconds**, CLS **0 / 0 / 0**, TBT **19 / 19.5 / 20.5ms**. The table above reflects these updated results; tool configuration and field-data limitations are unchanged. Updated cold-load totals above include the isolated theme component. All transfer budgets still pass.
+
+## Qualification and project copy update
+
+Added user-confirmed professional Next.js and Redux experience, a concrete X-Team fitness livestream/WebSocket example, and a compact third project for the support ticket dashboard. The local dashboard README, selector and UI test sources confirm priority filtering, optimistic updates and per-ticket rollback; the public repository link was opened successfully in Chromium. The brief assistance note distinguishes independently written priority-filter test extensions from the coached initial implementation. No featured-project test suite was executed or new passing-count claim made.
+
+Simplified gameplay highlights, led its disclosure with the author's contribution, removed noninteractive category arrows, reduced the testing-panel caption to “Testing scope”, and broadened contact copy to include Node.js full-stack roles. Private application/company context was not added to public copy. The supplied PDF remains unchanged.
+
+Build, lint and strict type checking passed; all 12 cross-browser checks passed, including the new project destination, accessibility, reflow, theme persistence and no-JavaScript access. Compact project screenshots were inspected at 320 and 1440 pixels and captured at 768 pixels. Earlier Lighthouse measurements apply to the preceding revision; performance was not remeasured for this content update.
+
+## GitHub Pages migration
+
+Repository: https://github.com/Moharu/portfolio-joao-telo. Configured GitHub Pages with Actions as the publishing source. Production URL: https://moharu.github.io/portfolio-joao-telo/.
+
+The user requested GitHub Pages hosting, superseding the original local-only delivery. Switched Next.js to static export with trailing slashes. GitHub Pages cannot run the on-demand image optimizer; the original ~93KB screenshot is now served directly. Server Components still prerender the page at build time. The isolated theme switch and no-JavaScript content continue to work.
+
+Verified the export's canonical, social-image URL, favicon path, sitemap, indexing configuration, screenshot and résumé links under `/portfolio-joao-telo/`. Production uses the real origin and allows indexing. The résumé remains bundled in `public/resume/joao-telo-resume.pdf`; no separate hosting is required. Supplied planning documents and original root PDF remain ignored.
+
+Static export build, lint and strict typing passed. The cross-browser suite was run against the local static server under the real repository path. Historical Next.js-server Lighthouse numbers above do not measure the new host or direct-image delivery. The deployment workflow installs pinned dependencies, lints, checks types, builds and publishes `out/` on pushes to `main`; it can also be run manually. Updated README documents maintenance and local subpath verification.

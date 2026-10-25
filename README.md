@@ -1,35 +1,76 @@
 # João Teló — portfolio
 
-Local-only Next.js App Router portfolio. No deployment has been created.
+React and TypeScript developer portfolio, built with Next.js App Router, strict TypeScript and Tailwind CSS. Dark mode is the default; a small isolated Client Component switches themes and remembers the visitor's choice. Portfolio content is rendered into HTML at build time.
 
-## Run
+- Repository: https://github.com/Moharu/portfolio-joao-telo
+- GitHub Pages: https://moharu.github.io/portfolio-joao-telo/
 
-Node.js 24 LTS and npm 11 were used. Install with `npm ci`, then `npm run dev` for development. Production preview: `npm run build` followed by `npm start`, then open http://localhost:3000. Stop with Ctrl+C.
+## Development and local preview
 
-The production build uses webpack because this environment blocks Turbopack's CSS worker port. This does not change the page's rendering model. All routes are prerendered at build time. There are no custom Client Components, runtime APIs, external fonts, analytics, or third-party rendering dependencies. Next.js still ships its framework JavaScript; it is included in measured budgets.
+Use Node.js 24 LTS and npm. Dependencies are pinned in package-lock.json.
 
-Exact installed versions are recorded in package-lock.json. Core versions: Next.js 16.4.3, React / React DOM 19.3.1, Tailwind CSS / PostCSS integration 4.3.3. Strict TypeScript is enabled.
+```bash
+npm ci
+npm run dev
+```
 
-## Content and assets
+For a root-path static preview:
 
-Edit `content/portfolio.ts` for profile, project and employment facts. Section presentation and supporting copy are in `components/portfolio.tsx`; design tokens and responsive styles are in `app/globals.css`. No client-side content fetching is used. The supplied English copy, career-break distinction, original role titles and visible AI-assistance statement are preserved. The system font stack is an allowed specification choice.
+```bash
+npm run build
+npm start
+```
 
-The supplied PDF is copied byte-for-byte to `public/resume/joao-telo-resume.pdf`, served at `/resume/joao-telo-resume.pdf`. Replace that file with an approved public résumé, then rebuild and verify selectable text, hyperlinks and layout. The source PDF remains untouched. Its availability wording is time-sensitive.
+Open http://localhost:3000/. `npm start` serves the exported `out/` directory, rather than starting a Next.js server. Stop with Ctrl+C. Local builds default to noindex.
 
-Project capture provenance and permission review: `public/projects/README.md`. The gameplay image is a real public demo capture, served with next/image, accurate dimensions and responsive sizes. The Playwright project uses the specification's permitted typographic category panel, verified against its repository README; it is not a fabricated test report. No development placeholders are required.
+To reproduce GitHub Pages paths and metadata locally:
 
-`public/social.png` is an original static typographic social preview; `app/icon.svg` is the favicon. No stock or generated product imagery is used.
+```bash
+SITE_URL=https://moharu.github.io/portfolio-joao-telo/ SITE_INDEXABLE=true NEXT_PUBLIC_BASE_PATH=/portfolio-joao-telo npm run build
+NEXT_PUBLIC_BASE_PATH=/portfolio-joao-telo npm start
+```
 
-## Deployment configuration — future action
+Open http://localhost:3000/portfolio-joao-telo/. Do not change environment variables between production build and preview except for the local test URL. The base path is compiled into asset links.
 
-Do not publish until requested. No production domain has been assumed. Set `SITE_URL` to the confirmed HTTPS origin (no path) before building. This supplies canonical metadata, metadataBase, sitemap and social-image origin. Set `SITE_INDEXABLE=true` only for the production build; previews must retain false. Apply hosting-level preview noindex protection too. These values are read at build time, so rebuild after changes.
+## Deployment
 
-Without an origin, canonical metadata is omitted and sitemap is empty. Next.js warns and uses localhost for social-image resolution during local builds; this is intentional for local work and must be resolved before launch. Production should support Next.js image optimization and serve the static route through its cache/CDN. Verify production canonical, sitemap, robots and indexing after deployment.
+`.github/workflows/pages.yml` builds and deploys on pushes to `main`, and supports manual runs under GitHub Actions. It installs from the lockfile, runs lint and strict type checking, exports the site and deploys `out/` using the official GitHub Pages actions. The repository's Pages source must be **GitHub Actions** (Settings → Pages).
 
-## Validation
+The workflow reads the actual Pages URL and base path from `actions/configure-pages` and sets:
 
-Run `npm run lint`, `npm run typecheck`, `npm run build`; start the production server; then `npm test`. The Playwright suite uses installed Chromium, Firefox and WebKit. On another machine install browsers using `npx playwright install --with-deps` first.
+- `SITE_URL`: complete HTTPS public site URL, **including the repository path and trailing slash**.
+- `NEXT_PUBLIC_BASE_PATH`: repository path, e.g. `/portfolio-joao-telo`; empty for a custom domain or account-root site.
+- `SITE_INDEXABLE=true`: production robots and page metadata allow indexing.
 
-`node scripts/audit.mjs` runs three Lighthouse mobile audits and a cold-load transfer measurement, and saves full-page responsive screenshots. Requires a running production server and Chromium. `node scripts/capture.mjs` reproduces the public gameplay capture (requires network); replacing an image should use a new asset filename to avoid stale optimized-image caches. `node scripts/review.mjs` records public link inspections. `node scripts/assets.mjs` generates the social card, extracts PDF text, and inspects the initial demo screen.
+Canonical, sitemap, social preview, favicon, screenshot and résumé links account for the Pages path. If you configure a custom domain later, update GitHub Pages settings and rerun the workflow; inspect the resulting canonical, sitemap and asset URLs.
 
-See `VALIDATION.md` for measured results, limitations and launch decisions. Raw audit/browser outputs are local ignored files in `artifacts/`, `test-results/` and `playwright-report/`. They are evidence from this implementation, not claims about the featured projects' current test results.
+GitHub Pages cannot run a Next.js server or its on-demand image optimizer. `next.config.ts` uses `output: "export"`, trailing slashes and unoptimized images. The genuine ~93KB WebP screenshot is served directly. Server Components still execute at build time; initial content and navigation work without JavaScript. There are no API routes, databases, external fonts or runtime rendering dependencies. Webpack is selected because this environment blocks Turbopack worker ports.
+
+## Content and résumé updates
+
+Edit `content/portfolio.ts` for profile, projects, skills and experience. Supporting copy and layout live in `components/portfolio.tsx`; design and theme tokens are in `app/globals.css`. Keep the visible assistance disclosures and the distinction between professional experience and personal projects.
+
+**The résumé is hosted with the site. No separate upload or storage service is needed.** Its tracked file is `public/resume/joao-telo-resume.pdf` and its public URL is:
+
+https://moharu.github.io/portfolio-joao-telo/resume/joao-telo-resume.pdf
+
+To replace it, overwrite that file, commit and push to `main`; the workflow publishes it along with the site. Review its selectable text, hyperlinks, layout and time-sensitive availability wording before replacing it. The original supplied root-level PDF and planning documents remain local and ignored; only the public copy is tracked. The supplied PDF has not been rewritten.
+
+Project capture provenance is in `public/projects/README.md`. No product screenshots or test results are fabricated. The testing panel lists scope, not pass counts. `public/social.png` is an original typographic preview; `app/icon.svg` is the favicon.
+
+## Checks and evidence
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+npm start
+# In another terminal:
+npm test
+```
+
+On a new machine install test browsers first with `npx playwright install --with-deps`. For a repository-path preview use `TEST_BASE_URL=http://localhost:3000/portfolio-joao-telo/ npm test`. The same variable can point the suite at the live Pages URL. The suite covers navigation, public destinations, résumé response, accessibility in both themes, responsive overflow, text enlargement, keyboard controls, persisted theme and no-JavaScript access across Chromium, Firefox and WebKit.
+
+With a server running, `TEST_BASE_URL=... node scripts/audit.mjs` records three mobile Lighthouse runs, cold-load transfers and viewport screenshots. `scripts/review.mjs` inspects external destinations; `scripts/capture.mjs` reproduces the genuine public gameplay image; `scripts/pdf-review.mjs` renders the supplied PDF and extracts its hyperlink information. The latter requires the original local PDF where documented by the script. Browser scripts require locally installed browsers and appropriate network access.
+
+`VALIDATION.md` records results and limitations. Raw browser and Lighthouse artifacts are ignored under `artifacts/`, `test-results/` and `playwright-report/`. Earlier Next.js-server performance results do not establish static Pages performance; measure the deployed site separately. Lab scores do not establish real-user Core Web Vitals.

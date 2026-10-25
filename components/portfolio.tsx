@@ -1,3 +1,4 @@
+import { ThemeToggle } from "./theme-toggle";
 import Image from "next/image";
 import {
   profile,
@@ -24,6 +25,7 @@ export function SiteHeader() {
         <a href={profile.resume}>
           Résumé <span className="muted">(PDF)</span> <Arrow />
         </a>
+        <ThemeToggle />
       </nav>
     </header>
   );
@@ -36,9 +38,9 @@ export function Hero() {
         React · TypeScript · Front-end development
       </p>
       <h1 id="hero-title">
-        Thoughtful interfaces.
+        I build interfaces.
         <br />
-        <span>Reliable implementation.</span>
+        <span>And care how they work.</span>
       </h1>
       <div className="hero-bottom">
         <div>
@@ -85,6 +87,30 @@ function SectionHeading({
   );
 }
 function ProjectCard({ project, index }: { project: Project; index: number }) {
+  if (project.compact) {
+    return (
+      <article className="compact-project">
+        <div>
+          <p className="eyebrow">{project.label}</p>
+          <h3>{project.title}</h3>
+          <ul className="tags" aria-label="Technologies">
+            {project.tags.map((tag) => (
+              <li key={tag}>{tag}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p>{project.description}</p>
+          {project.links.map((link) => (
+            <a className="text-link" key={link.href} href={link.href}>
+              {link.label} <Arrow />
+            </a>
+          ))}
+          <p className="disclosure">{project.disclosure}</p>
+        </div>
+      </article>
+    );
+  }
   return (
     <article className="project">
       <div className="project-title">
@@ -134,11 +160,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 <li key={x}>
                   <span>0{i + 1}</span>
                   {x}
-                  <span aria-hidden="true">↗</span>
                 </li>
               ))}
             </ul>
-            <small>Test categories · no execution results implied</small>
+            <small>Testing scope</small>
           </div>
         )}
       </div>
@@ -254,12 +279,11 @@ export function ContactSection() {
     <section id="contact" className="section shell contact">
       <p className="eyebrow">04 / CONTACT</p>
       <h2>
-        Let&apos;s talk about your team<span>.</span>
+        Have a role in mind<span>?</span>
       </h2>
       <p>
-        I&apos;m interested in React and TypeScript front-end roles, including
-        opportunities where my full-stack background and testing experience can
-        help.
+        I’m looking for a React and TypeScript frontend role, or a full-stack
+        position where my Node.js experience can contribute.
       </p>
       <a className="contact-email" href={`mailto:${profile.email}`}>
         {profile.email} <Arrow />

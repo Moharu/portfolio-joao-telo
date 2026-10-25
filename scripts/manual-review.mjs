@@ -1,3 +1,4 @@
+const siteUrl = process.env.TEST_BASE_URL ?? "http://localhost:3000/";
 import { chromium } from "@playwright/test";
 import { PDFParse } from "pdf-parse";
 import fs from "node:fs/promises";
@@ -10,7 +11,7 @@ page.on("console", (m) => {
 page.on("requestfailed", (r) =>
   errors.push(r.url() + ": " + r.failure()?.errorText),
 );
-await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+await page.goto(siteUrl, { waitUntil: "networkidle" });
 const focused = [];
 for (let i = 0; i < 35; i++) {
   await page.keyboard.press("Tab");
@@ -31,7 +32,7 @@ await page.screenshot({
 const variants = [];
 for (const width of [320, 390, 768, 1024, 1440]) {
   await page.setViewportSize({ width, height: 1000 });
-  await page.goto("http://localhost:3000");
+  await page.goto(siteUrl);
   const img = page.locator("#projects img");
   await img.scrollIntoViewIfNeeded();
   await img.evaluate(async (x) => {

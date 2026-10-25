@@ -1,3 +1,4 @@
+const siteUrl = process.env.TEST_BASE_URL ?? "http://localhost:3000/";
 import { chromium } from "@playwright/test";
 import lighthouse from "lighthouse";
 import fs from "node:fs/promises";
@@ -25,7 +26,7 @@ client.on(
   "Network.loadingFinished",
   (e) => (sizes[e.requestId] = e.encodedDataLength),
 );
-await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+await page.goto(siteUrl, { waitUntil: "networkidle" });
 await page.waitForTimeout(1500);
 const rows = resources.map((x) => ({ ...x, bytes: sizes[x.requestId] || 0 }));
 const totals = {};
@@ -47,7 +48,7 @@ for (const [width, height] of [
   [667, 375],
 ]) {
   await page.setViewportSize({ width, height });
-  await page.goto("http://localhost:3000");
+  await page.goto(siteUrl);
   await page.screenshot({
     path: `artifacts/portfolio-${width}.png`,
     fullPage: true,
@@ -55,7 +56,7 @@ for (const [width, height] of [
 }
 const reports = [];
 for (let i = 1; i <= 3; i++) {
-  const result = await lighthouse("http://localhost:3000", {
+  const result = await lighthouse(siteUrl, {
     port: 9222,
     output: "json",
     onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
