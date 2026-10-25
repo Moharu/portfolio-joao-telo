@@ -40,7 +40,7 @@ export function Hero() {
       <h1 id="hero-title">
         I build interfaces.
         <br />
-        <span>And care how they work.</span>
+        <span>And pay attention to the details.</span>
       </h1>
       <div className="hero-bottom">
         <div>
@@ -121,7 +121,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {project.image ? (
           <Image
             src={project.image}
-            alt="Gameplay review demo showing timestamped notes and category filters"
+            alt="Updated gameplay review demo with recording playback beside timestamped feedback and category controls"
             width={1440}
             height={1000}
             sizes="(min-width: 1200px) 620px, (min-width: 768px) 52vw, calc(100vw - 40px)"

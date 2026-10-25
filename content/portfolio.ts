@@ -21,7 +21,7 @@ export interface Project {
 }
 export const projects: Project[] = [
   {
-    image: assetPath("/projects/gameplay-review-demo.webp"),
+    image: assetPath("/projects/gameplay-review-2026-10-25.webp"),
     title: "Gameplay Video Review Tool",
     label: "Personal project · MVP · October 2026",
     description:

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
       : { index: false, follow: false },
   openGraph: {
     title: "João Teló | React & TypeScript Developer",
-    description: "I build interfaces. And care how they work.",
+    description: "I build interfaces. And pay attention to the details.",
     type: "website",
     locale: "en_US",
     images: [{ url: socialImage, width: 1200, height: 630 }],

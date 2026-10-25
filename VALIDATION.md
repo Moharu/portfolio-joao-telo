@@ -97,3 +97,9 @@ The first Pages workflow succeeded: https://github.com/Moharu/portfolio-joao-tel
 Three Lighthouse 13.5.0 default mobile runs against the live URL scored **100 Performance, 100 Accessibility, 100 Best Practices and 100 SEO in every run**. Same documented mobile simulation as above (412 × 823, DPR 1.75, simulated network, 4× CPU). LCP: **0.922 / 1.611 / 0.922s**; CLS: **0 / 0 / 0**; TBT: **40 / 41 / 42ms**. These are lab results from the deployed host, not real-user Core Web Vitals. Production indexing is enabled; the earlier preview's SEO score is historical.
 
 Live cold browser-cache-disabled transfer at 390 × 844, DPR 1, before scrolling: HTML **8,046 bytes**, CSS **4,804 bytes**, JavaScript **142,391 bytes**, images **94,827 bytes**, fonts **0 bytes**, total **250,068 bytes**. All specified budgets pass, including the direct screenshot's 150KB aim. CDN caches may be warm; browser cache was disabled. The PDF is excluded until requested and was separately verified by the browser suite. Raw reports and resource headers are retained in local ignored artifacts.
+
+## 25 October 2026 — headline and gameplay capture refresh
+
+Changed the hero and social preview to “I build interfaces. And pay attention to the details.” Captured the current public gameplay demo in a fresh Chromium context at 1440 × 1000, paused at 1:07. The authentic capture shows the redesigned dark workspace, playback, category controls and both timestamped notes. Updated provenance and alt text, and used a dated asset filename to avoid cached older imagery. The WebP remains under 150KB.
+
+Production static export, lint and strict type checking passed. All 12 cross-browser checks passed against the Pages-subpath preview, including responsive reflow for the longer headline, accessibility in both themes and no-JavaScript content. Earlier Lighthouse scores are historical; performance was not remeasured for this copy/asset refresh.

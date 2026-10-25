@@ -22,5 +22,5 @@ await page.waitForTimeout(1500);
 await page.screenshot({ path: "artifacts/demo-active.png" });
 await sharp("artifacts/demo-active.png")
   .webp({ quality: 80 })
-  .toFile("public/projects/gameplay-review-demo.webp");
+  .toFile("public/projects/gameplay-review-2026-10-25.webp");
 await browser.close();
