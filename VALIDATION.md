@@ -89,3 +89,11 @@ The user requested GitHub Pages hosting, superseding the original local-only del
 Verified the export's canonical, social-image URL, favicon path, sitemap, indexing configuration, screenshot and résumé links under `/portfolio-joao-telo/`. Production uses the real origin and allows indexing. The résumé remains bundled in `public/resume/joao-telo-resume.pdf`; no separate hosting is required. Supplied planning documents and original root PDF remain ignored.
 
 Static export build, lint and strict typing passed. The cross-browser suite was run against the local static server under the real repository path. Historical Next.js-server Lighthouse numbers above do not measure the new host or direct-image delivery. The deployment workflow installs pinned dependencies, lints, checks types, builds and publishes `out/` on pushes to `main`; it can also be run manually. Updated README documents maintenance and local subpath verification.
+
+### Live deployment results
+
+The first Pages workflow succeeded: https://github.com/Moharu/portfolio-joao-telo/actions/runs/40151235882. All 12 browser checks also passed against **https://moharu.github.io/portfolio-joao-telo/**, including PDF delivery, dark/light accessibility, responsive reflow and no-JavaScript access. HTTPS is enforced.
+
+Three Lighthouse 13.5.0 default mobile runs against the live URL scored **100 Performance, 100 Accessibility, 100 Best Practices and 100 SEO in every run**. Same documented mobile simulation as above (412 × 823, DPR 1.75, simulated network, 4× CPU). LCP: **0.922 / 1.611 / 0.922s**; CLS: **0 / 0 / 0**; TBT: **40 / 41 / 42ms**. These are lab results from the deployed host, not real-user Core Web Vitals. Production indexing is enabled; the earlier preview's SEO score is historical.
+
+Live cold browser-cache-disabled transfer at 390 × 844, DPR 1, before scrolling: HTML **8,046 bytes**, CSS **4,804 bytes**, JavaScript **142,391 bytes**, images **94,827 bytes**, fonts **0 bytes**, total **250,068 bytes**. All specified budgets pass, including the direct screenshot's 150KB aim. CDN caches may be warm; browser cache was disabled. The PDF is excluded until requested and was separately verified by the browser suite. Raw reports and resource headers are retained in local ignored artifacts.
